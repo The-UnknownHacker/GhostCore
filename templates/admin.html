@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<script>
+    // Show loading indicator when updating stats
+    document.querySelector('a[href="{{ url_for('update_github_stats') }}"]').addEventListener('click', function() {
+        document.getElementById('loading-indicator').style.display = 'block';
+    });
+
+    // Show loading indicator on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('loading-indicator').style.display = 'block';
+        // Hide after 2 seconds (adjust based on your needs)
+        setTimeout(function() {
+            document.getElementById('loading-indicator').style.display = 'none';
+        }, 2000);
+    });
+</script>
+<div class="container py-5">
+    <h2 class="mb-4">Admin Panel</h2>
+
+    <!-- Add Service Form -->
+    <div class="card bg-dark text-light mb-5">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Add New Service</h3>
+            <form action="{{ url_for('add_service') }}" method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="name" class="form-label">Service Name</label>
+                        <input type="text" class="form-control bg-dark text-light" id="name" name="name" required>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="github_url" class="form-label">GitHub URL</label>
+                        <input type="url" class="form-control bg-dark text-light" id="github_url" name="github_url" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="description" class="form-label">Description</label>
+                    <textarea class="form-control bg-dark text-light" id="description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="demo_url" class="form-label">Demo URL</label>
+                    <input type="url" class="form-control bg-dark text-light" id="demo_url" name="demo_url">
+                </div>
+                <button type="submit" class="btn btn-primary">Add Service</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add this near the top of the admin panel -->
+    <div class="mb-4">
+        <a href="{{ url_for('update_github_stats') }}" class="btn btn-ghost me-2">
+            <i class="fas fa-sync me-2"></i>Update GitHub Stats
+        </a>
+        <a href="{{ url_for('test_github') }}" class="btn btn-outline-light me-2" target="_blank">
+            <i class="fas fa-bug me-2"></i>Test GitHub API
+        </a>
+        <a href="{{ url_for('debug_stats') }}" class="btn btn-outline-light" target="_blank">
+            <i class="fas fa-database me-2"></i>Debug Database
+        </a>
+    </div>
+
+    <!-- Services List -->
+    <div class="card bg-dark text-light">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Manage Services</h3>
+            <div id="loading-indicator" class="text-center mb-3" style="display: none;">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Updating GitHub stats...</p>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>GitHub</th>
+                            <th>Stars</th>
+                            <th>Demo</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr>
+                            <td>{{ service.name }}</td>
+                            <td>{{ service.description }}</td>
+                            <td><a href="{{ service.github_url }}" target="_blank" class="text-light">View</a></td>
+                            <td>
+                                {% if service.stars is defined %}
+                                <i class="fas fa-star text-warning me-1"></i>{{ service.stars }}
+                                {% else %}
+                                <span class="text-muted">N/A</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if service.demo_url %}
+                                <a href="{{ service.demo_url }}" target="_blank" class="text-light">View</a>
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ url_for('delete_service', id=service.id) }}" 
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this service?')">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Add Service{% endblock %}
+
+{% block content %}
+<main class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card bg-dark text-light border-0 shadow-lg">
+                <div class="card-body p-5">
+                    <h2 class="mb-4">Add New Service</h2>
+                    
+                    <form method="POST" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Service Name</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text bg-dark border-secondary text-light">
+                                    <i class="fas fa-cube"></i>
+                                </span>
+                                <input type="text" 
+                                       class="form-control bg-dark text-light border-secondary" 
+                                       id="name" 
+                                       name="name" 
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please enter a service name
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text bg-dark border-secondary text-light">
+                                    <i class="fas fa-align-left"></i>
+                                </span>
+                                <textarea class="form-control bg-dark text-light border-secondary" 
+                                          id="description" 
+                                          name="description" 
+                                          rows="3" 
+                                          required></textarea>
+                                <div class="invalid-feedback">
+                                    Please provide a description
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="github_url" class="form-label">GitHub URL</label>
+                            <div class="input-group has-validation">
+                                <span class="input-group-text bg-dark border-secondary text-light">
+                                    <i class="fab fa-github"></i>
+                                </span>
+                                <input type="url" 
+                                       class="form-control bg-dark text-light border-secondary" 
+                                       id="github_url" 
+                                       name="github_url" 
+                                       required>
+                                <div class="invalid-feedback">
+                                    Please enter a valid GitHub URL
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="demo_url" class="form-label">Demo URL (Optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary text-light">
+                                    <i class="fas fa-external-link-alt"></i>
+                                </span>
+                                <input type="url" 
+                                       class="form-control bg-dark text-light border-secondary" 
+                                       id="demo_url" 
+                                       name="demo_url">
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-ghost">
+                                <i class="fas fa-plus me-2"></i>Add Service
+                            </button>
+                            <a href="{{ url_for('org_dashboard', org_name=session.org_name) }}" 
+                               class="btn btn-outline-light">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %} 

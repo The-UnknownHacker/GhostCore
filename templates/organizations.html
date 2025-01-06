@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Organizations{% endblock %}
+
+{% block content %}
+<main class="container py-5 mt-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">Organizations</h1>
+        <p class="lead">Discover services from different organizations</p>
+    </div>
+
+    <div class="row g-4">
+        {% for org in organizations %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-dark text-light border-0 shadow-lg h-100">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-3">{{ org.display_name }}</h3>
+                    <p class="text-muted mb-3">{{ org.service_count }} Services</p>
+                    <div class="d-grid">
+                        <a href="{{ url_for('org_services', org_name=org.name) }}" class="btn btn-ghost">
+                            <i class="fas fa-cube me-2"></i>View Services
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %} 

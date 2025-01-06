@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <h1 class="mb-5">Admin Panel</h1>
+
+    <!-- Organizations Section -->
+    <div class="card bg-dark text-light mb-5">
+        <div class="card-body">
+            <h2 class="card-title h4 mb-4">Organizations</h2>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Display Name</th>
+                            <th>Services</th>
+                            <th>Users</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for org in organizations %}
+                        <tr>
+                            <td>{{ org[1] }}</td>
+                            <td>{{ org[2] }}</td>
+                            <td>{{ org[4] }}</td>
+                            <td>{{ org[5] }}</td>
+                            <td>{{ org[3] }}</td>
+                            <td>
+                                {% if org[1] != 'default' %}
+                                <button class="btn btn-sm btn-danger" 
+                                        onclick="confirmDelete('org', {{ org[0] }}, '{{ org[2] }}')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Users Section -->
+    <div class="card bg-dark text-light mb-5">
+        <div class="card-body">
+            <h2 class="card-title h4 mb-4">Users</h2>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Organization</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user[1] }}</td>
+                            <td>{{ user[2] }}</td>
+                            <td>{{ user[4] }}</td>
+                            <td>{{ user[3] }}</td>
+                            <td>
+                                {% if user[1] != 'admin' %}
+                                <button class="btn btn-sm btn-danger" 
+                                        onclick="confirmDelete('user', {{ user[0] }}, '{{ user[1] }}')">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Services Section -->
+    <div class="card bg-dark text-light">
+        <div class="card-body">
+            <h2 class="card-title h4 mb-4">Services</h2>
+            <div class="table-responsive">
+                <table class="table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Organization</th>
+                            <th>Views</th>
+                            <th>Stars</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for service in services %}
+                        <tr>
+                            <td>{{ service[1] }}</td>
+                            <td>{{ service[5] }}</td>
+                            <td>{{ service[6] or 0 }}</td>
+                            <td>{{ service[7] or 0 }}</td>
+                            <td>{{ service[4] }}</td>
+                            <td>
+                                <a href="{{ url_for('service_detail', id=service[0]) }}" 
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="deleteModalBody">
+                Are you sure you want to delete this item?
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                <a href="#" id="deleteConfirmBtn" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(type, id, name) {
+    const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    const modalBody = document.getElementById('deleteModalBody');
+    const deleteBtn = document.getElementById('deleteConfirmBtn');
+    
+    if (type === 'org') {
+        modalBody.textContent = `Are you sure you want to delete the organization "${name}"? This will also delete all its services and users!`;
+        deleteBtn.href = "{{ url_for('admin_delete_org', org_id=0) }}".replace('0', id);
+    } else if (type === 'user') {
+        modalBody.textContent = `Are you sure you want to delete the user "${name}"?`;
+        deleteBtn.href = "{{ url_for('admin_delete_user', user_id=0) }}".replace('0', id);
+    }
+    
+    modal.show();
+}
+</script>
+{% endblock %} 

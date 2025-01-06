@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<main class="d-flex align-items-center min-vh-100 py-5 mt-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="text-center mb-4">
+                    <i class="fas fa-user-plus fa-3x mb-3 text-primary"></i>
+                    <h1 class="h3">Create Account To Start Adding Services</h1>
+                </div>
+                
+                <div class="card bg-dark text-light border-0 shadow-lg">
+                    <div class="card-body p-5">
+                        <form method="POST" class="needs-validation" novalidate>
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text bg-dark border-secondary text-light">
+                                        <i class="fas fa-user"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control bg-dark text-light border-secondary" 
+                                           id="username" 
+                                           name="username" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Please choose a username
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text bg-dark border-secondary text-light">
+                                        <i class="fas fa-envelope"></i>
+                                    </span>
+                                    <input type="email" 
+                                           class="form-control bg-dark text-light border-secondary" 
+                                           id="email" 
+                                           name="email" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email address
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text bg-dark border-secondary text-light">
+                                        <i class="fas fa-lock"></i>
+                                    </span>
+                                    <input type="password" 
+                                           class="form-control bg-dark text-light border-secondary" 
+                                           id="password" 
+                                           name="password" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Please choose a password
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="org_name" class="form-label">Organization URL Name</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text bg-dark border-secondary text-light">
+                                        <i class="fas fa-link"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control bg-dark text-light border-secondary" 
+                                           id="org_name" 
+                                           name="org_name" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Please choose an organization URL name
+                                    </div>
+                                </div>
+                                <small class="text-muted">This will be used in your URL: ghostcore.com/org-name</small>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="org_display_name" class="form-label">Organization Display Name</label>
+                                <div class="input-group has-validation">
+                                    <span class="input-group-text bg-dark border-secondary text-light">
+                                        <i class="fas fa-building"></i>
+                                    </span>
+                                    <input type="text" 
+                                           class="form-control bg-dark text-light border-secondary" 
+                                           id="org_display_name" 
+                                           name="org_display_name" 
+                                           required>
+                                    <div class="invalid-feedback">
+                                        Please enter your organization's display name
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-ghost btn-lg">
+                                    <i class="fas fa-user-plus me-2"></i>Sign Up
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="text-center mt-4">
+                    <div class="d-inline-block bg-dark p-3 rounded-3 border border-secondary">
+                        <span class="text-light">Already have an account?</span>
+                        <a href="{{ url_for('login') }}" class="btn btn-ghost btn-sm ms-2">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+// Form validation
+(function () {
+    'use strict'
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %} 

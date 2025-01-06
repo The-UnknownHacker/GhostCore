@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}Documentation{% endblock %}
+
+{% block content %}
+<main class="container py-5 mt-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-3">
+            <div class="card bg-dark text-light sticky-top" style="top: 100px;">
+                <div class="card-body">
+                    <h5 class="mb-3">Contents</h5>
+                    <nav class="nav flex-column">
+                        <a class="nav-link text-light" href="#getting-started">Getting Started</a>
+                        <a class="nav-link text-light" href="#organizations">Organizations</a>
+                        <a class="nav-link text-light" href="#services">Services</a>
+                        <a class="nav-link text-light" href="#api">API Reference</a>
+                        <a class="nav-link text-light" href="#contributing">Contributing</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Documentation Content -->
+        <div class="col-lg-9">
+            <div class="card bg-dark text-light">
+                <div class="card-body p-5">
+                    <h1 class="mb-5">GhostCore Documentation</h1>
+
+                    <!-- Getting Started -->
+                    <section id="getting-started" class="mb-5">
+                        <h2 class="h3 mb-4">Getting Started</h2>
+                        <p>GhostCore is a platform that unites your services under one ecosystem. Here's how to get started:</p>
+                        
+                        <h3 class="h5 mt-4">1. Create an Account</h3>
+                        <p>Start by creating an account and setting up your organization:</p>
+                        <ul>
+                            <li>Click the "Sign Up" button in the navigation bar</li>
+                            <li>Fill in your details and organization information</li>
+                            <li>Your organization name will be used in URLs (e.g., ghostcore.com/your-org)</li>
+                        </ul>
+
+                        <h3 class="h5 mt-4">2. Add Your First Service</h3>
+                        <p>Once logged in, you can start adding services:</p>
+                        <ul>
+                            <li>Navigate to your organization dashboard</li>
+                            <li>Click "Add Service"</li>
+                            <li>Provide service details including GitHub URL</li>
+                        </ul>
+                    </section>
+
+                    <!-- Organizations -->
+                    <section id="organizations" class="mb-5">
+                        <h2 class="h3 mb-4">Organizations</h2>
+                        <p>Organizations are the core unit of GhostCore. Each organization can:</p>
+                        <ul>
+                            <li>Host multiple services</li>
+                            <li>Have multiple team members</li>
+                            <li>Customize their display name and URL</li>
+                            <li>Track service analytics</li>
+                        </ul>
+
+                        <div class="alert alert-info bg-dark border-info text-light mt-3">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Organization names must be unique and can only contain letters, numbers, and hyphens.
+                        </div>
+                    </section>
+
+                    <!-- Services -->
+                    <section id="services" class="mb-5">
+                        <h2 class="h3 mb-4">Services</h2>
+                        <p>Services represent your GitHub projects. Each service includes:</p>
+                        <ul>
+                            <li>GitHub repository integration</li>
+                            <li>README display</li>
+                            <li>Version history tracking</li>
+                            <li>View and star analytics</li>
+                        </ul>
+
+                        <h3 class="h5 mt-4">Service Features</h3>
+                        <div class="table-responsive">
+                            <table class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>GitHub Integration</td>
+                                        <td>Automatic README sync and repository information</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Version History</td>
+                                        <td>Track and display service updates</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Analytics</td>
+                                        <td>Track views and stars for your service</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- API Reference -->
+                    <section id="api" class="mb-5">
+                        <h2 class="h3 mb-4">API Reference</h2>
+                        <p>GhostCore provides a RESTful API for integrating with your services:</p>
+
+                        <h3 class="h5 mt-4">Authentication</h3>
+                        <pre class="bg-dark p-3 rounded"><code>curl -X POST https://ghostcore.vercel.app/auth
+-H "Content-Type: application/json"
+-d '{"username": "your_username", "password": "your_password"}'</code></pre>
+
+                        <h3 class="h5 mt-4">Endpoints</h3>
+                        <div class="table-responsive">
+                            <table class="table table-dark">
+                                <thead>
+                                    <tr>
+                                        <th>Endpoint</th>
+                                        <th>Method</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>/api/services</td>
+                                        <td>GET</td>
+                                        <td>List all services</td>
+                                    </tr>
+                                    <tr>
+                                        <td>/api/services/{id}</td>
+                                        <td>GET</td>
+                                        <td>Get service details</td>
+                                    </tr>
+                                    <tr>
+                                        <td>/api/organizations</td>
+                                        <td>GET</td>
+                                        <td>List all organizations</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <!-- Contributing -->
+                    <section id="contributing" class="mb-5">
+                        <h2 class="h3 mb-4">Contributing</h2>
+                        <p>We welcome contributions to GhostCore! Here's how you can help:</p>
+                        
+                        <h3 class="h5 mt-4">Development Setup</h3>
+                        <pre class="bg-dark p-3 rounded"><code>git clone https://github.com/The-UnknownHacker/ghostcore
+cd ghostcore
+pip install -r requirements.txt
+python app.py</code></pre>
+
+                        <h3 class="h5 mt-4">Guidelines</h3>
+                        <ul>
+                            <li>Fork the repository</li>
+                            <li>Create a feature branch</li>
+                            <li>Write clear commit messages</li>
+                            <li>Add tests for new features</li>
+                            <li>Submit a pull request</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Highlight active section in sidebar
+window.addEventListener('scroll', function() {
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+    
+    sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 100) {
+            const id = section.getAttribute('id');
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${id}`) {
+                    link.classList.add('active');
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock %} 

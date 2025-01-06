@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% block title %}{{ service[1] }}{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <!-- Service Info Card -->
+            <div class="card bg-dark text-light mb-4" data-aos="fade-up">
+                <div class="card-body p-4">
+                    <h1 class="h2 mb-3">{{ service[1] }}</h1>
+                    <p class="lead mb-4">{{ service[2] }}</p>
+                    <div class="d-flex gap-2">
+                        <a href="{{ service[3] }}" class="btn btn-outline-light" target="_blank">
+                            <i class="fab fa-github me-2"></i>GitHub
+                        </a>
+                        {% if service[4] %}
+                        <a href="{{ service[4] }}" class="btn btn-ghost" target="_blank">
+                            <i class="fas fa-external-link-alt me-2"></i>Demo
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- README Section -->
+            {% if readme_html %}
+            <div class="card bg-dark text-light mb-4" data-aos="fade-up">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-4">README</h2>
+                    <div class="readme-content">
+                        {{ readme_html | safe }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <!-- Stats Cards -->
+            <div class="row g-4 mb-4">
+                <div class="col-6">
+                    <div class="card bg-dark text-light h-100" data-aos="fade-left">
+                        <div class="card-body p-4 text-center">
+                            <i class="fas fa-star fa-2x text-warning mb-2"></i>
+                            <h3 class="h2 mb-0">{{ stats[0][2] or 0 }}</h3>
+                            <p class="text-muted mb-0">Stars</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="card bg-dark text-light h-100" data-aos="fade-left" data-aos-delay="100">
+                        <div class="card-body p-4 text-center">
+                            <i class="fas fa-eye fa-2x text-info mb-2"></i>
+                            <h3 class="h2 mb-0">{{ stats[0][1] or 0 }}</h3>
+                            <p class="text-muted mb-0">Views</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Actions -->
+            {% if session.get('user_id') and service[5] == session.get('org_id') %}
+            <div class="card bg-dark text-light mb-4" data-aos="fade-left">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-4">Admin Actions</h3>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('edit_service', id=service[0]) }}" class="btn btn-outline-light">
+                            <i class="fas fa-edit me-2"></i>Edit Service
+                        </a>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                            <i class="fas fa-trash-alt me-2"></i>Delete Service
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Changelog Entry -->
+            <div class="card bg-dark text-light mb-4" data-aos="fade-left">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-4">Add Version</h3>
+                    <form action="{{ url_for('add_changelog') }}" method="POST">
+                        <input type="hidden" name="service_id" value="{{ service[0] }}">
+                        <div class="mb-3">
+                            <label class="form-label">Version Number</label>
+                            <input type="text" class="form-control bg-dark text-light" name="version" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Changes</label>
+                            <textarea class="form-control bg-dark text-light" name="changes" rows="3" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-ghost w-100">
+                            <i class="fas fa-plus me-2"></i>Add Version
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Changelog -->
+            <div class="card bg-dark text-light" data-aos="fade-left">
+                <div class="card-body p-4">
+                    <h3 class="h4 mb-4">Version History</h3>
+                    <div class="timeline">
+                        {% for entry in changelog %}
+                        <div class="timeline-item">
+                            <div class="timeline-badge">
+                                <i class="fas fa-code-branch"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h4 class="h5">Version {{ entry[2] }}</h4>
+                                <p class="mb-2">{{ entry[3] }}</p>
+                                <small class="text-muted">{{ entry[4] }}</small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% if not changelog %}
+                        <p class="text-muted text-center">No version history yet.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+{% if session.get('user_id') and service[5] == session.get('org_id') %}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title">Confirm Delete</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete {{ service[1] }}?
+            </div>
+            <div class="modal-footer border-secondary">
+                <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancel</button>
+                <a href="{{ url_for('delete_service', id=service[0]) }}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    // Scroll to top on page load
+    window.onload = function() {
+        window.scrollTo(0, 0);
+    };
+</script>
+{% endblock %} 

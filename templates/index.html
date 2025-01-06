@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}GhostCore - Uniting Your Services{% endblock %}
+
+{% block content %}
+<main>
+  <div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="display-4 mb-3">Welcome to GhostCore</h1>
+        <p class="lead">Uniting Your Services for a Seamless Experience</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-6 text-center">
+            <div class="card bg-dark text-light border-0 shadow-lg p-4">
+                <i class="fas fa-ghost fa-4x mb-3 text-primary"></i>
+                <h2 class="h4 mb-3">Explore Organizations</h2>
+                <p class="mb-4">Discover services from different organizations in our growing ecosystem.</p>
+                <a href="{{ url_for('organizations') }}" class="btn btn-ghost">
+                    <i class="fas fa-building me-2"></i>Browse Organizations
+                </a>
+            </div>
+        </div>
+    </div>
+  </div>
+</main>
+{% endblock %} 
