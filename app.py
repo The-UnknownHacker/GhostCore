@@ -451,36 +451,35 @@ def service_detail(id):
     conn = sqlite3.connect('ghostcore.db')
     c = conn.cursor()
     
-    # Get service details
-    c.execute('''SELECT s.*, st.views, st.stars 
-                 FROM services s
-                 LEFT JOIN statistics st ON s.id = st.service_id
-                 WHERE s.id = ?''', (id,))
-    service = c.fetchone()
-    
-    if not service:
-        flash('Service not found!', 'error')
-        return redirect(url_for('index'))
-    
-    # Get README content
-    owner, repo = extract_github_info(service[3])  # service[3] is github_url
-    readme_html = get_github_readme(owner, repo) if owner and repo else None
-    
-    # Get changelog
-    c.execute('SELECT * FROM changelog WHERE service_id = ? ORDER BY release_date DESC', (id,))
-    changelog = c.fetchall()
-    
-    # Get statistics
-    c.execute('SELECT * FROM statistics WHERE service_id = ?', (id,))
-    stats = c.fetchall()
-    
-    conn.close()
-    
-    return render_template('service_detail.html',
-                         service=service,
-                         readme_html=readme_html,
-                         changelog=changelog,
-                         stats=stats)
+    try:
+        c.execute('''
+            SELECT s.*, st.views, st.stars 
+            FROM services s
+            LEFT JOIN statistics st ON s.id = st.service_id
+            WHERE s.id = ?
+        ''', (id,))
+        service = c.fetchone()
+        
+        if not service:
+            flash('Service not found', 'error')
+            return redirect(url_for('index'))
+            
+        c.execute('SELECT * FROM statistics WHERE service_id = ?', (id,))
+        stats = c.fetchone() or [0, 0, 0, 0, None]  # Default values if no stats
+        
+        owner, repo = extract_github_info(service[3])
+        readme_html = get_github_readme(owner, repo) if owner and repo else None
+        
+        c.execute('SELECT * FROM changelog WHERE service_id = ? ORDER BY release_date DESC', (id,))
+        changelog = c.fetchall()
+        
+        return render_template('service_detail.html',
+                             service=service,
+                             stats=stats,
+                             readme_html=readme_html,
+                             changelog=changelog)
+    finally:
+        conn.close()
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
