@@ -501,22 +501,44 @@ def submit_feedback():
     return redirect(url_for('service_detail', id=service_id))
 
 @app.route('/add_changelog', methods=['POST'])
-@login_required
 def add_changelog():
-    service_id = request.form['service_id']
-    version = request.form['version']
-    changes = request.form['changes']
+    if not session.get('user_id'):
+        return redirect(url_for('login'))
+    
+    service_id = request.form.get('service_id')
+    version = request.form.get('version')
+    changes = request.form.get('changes')
     
     conn = sqlite3.connect('ghostcore.db')
     c = conn.cursor()
-    c.execute('''INSERT INTO changelog (service_id, version, changes, release_date)
-                 VALUES (?, ?, ?, ?)''',
-              (service_id, version, changes, datetime.now()))
-    conn.commit()
-    conn.close()
     
-    flash('Changelog added successfully!', 'success')
-    return redirect(url_for('admin'))
+    try:
+        # Verify user owns the service
+        c.execute('''SELECT s.* FROM services s 
+                    WHERE s.id = ? AND s.org_id = ?''', 
+                 (service_id, session['org_id']))
+        service = c.fetchone()
+        
+        if not service:
+            flash('Access denied!', 'error')
+            return redirect(url_for('index'))
+        
+        # Add changelog entry
+        c.execute('''INSERT INTO changelog 
+                    (service_id, version, changes, release_date)
+                    VALUES (?, ?, ?, ?)''',
+                 (service_id, version, changes, datetime.now()))
+        conn.commit()
+        
+        flash('Version added successfully!', 'success')
+        return redirect(url_for('service_detail', id=service_id))
+        
+    except Exception as e:
+        flash(f'Error adding version: {str(e)}', 'error')
+        return redirect(url_for('service_detail', id=service_id))
+        
+    finally:
+        conn.close()
 
 @app.route('/update_github_stats')
 @login_required
